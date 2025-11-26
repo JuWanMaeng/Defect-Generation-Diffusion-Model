@@ -1,0 +1,67 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "MAGIC: Debug inference.py (GPU Launch)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/inference.py",
+            "console": "integratedTerminal",
+            "args": [
+                // ❗️❗️ 아래 7개 경로는 본인 환경에 맞게 수정하세요 ❗️❗️
+                "--model_ckpt_root", "alwold/stable-diffusion-2-inpainting",
+                "--ddim_scheduler_root", "scheduler", // ❗️ 필수!
+                "--defect_json", "dataset_copy/CAMA_json_file/defect_classification.json",
+                "--match_json", "dataset_copy/CAMA_json_file/matching_result.json",
+                "--normal_masks", "dataset_copy/obj_foreground_mask",
+                "--mask_dir", "dataset_copy/anomaly_mask",
+                "--base_dir", "dataset_copy/mvtecad",
+                
+                // --- (MAGIC 논문 파라미터) ---
+                "--CAMA",
+                "--anomaly_stop_step", "20",
+                "--text_noise_scale", "1.0",
+                "--anomaly_strength_min", "0.0",
+                "--anomaly_strength_max", "0.6",
+
+                // --- (데이터셋 설정) ---
+                "--categories", "screw",
+                "--dataset_type", "mvtec"
+            ]
+        },
+        {
+            "name": "MAGIC:Debug train_dreambooth",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/train_dreambooth_noise.py",
+            "console": "integratedTerminal",
+            "args": [
+                // ❗️❗️❗️ 아래 경로들도 본인 환경에 맞게 모두 수정해야 합니다 ❗️❗️❗️
+                "--pretrained_model_name_or_path=alwold/stable-diffusion-2-inpainting",
+                // "--instance_data_dir=C:/data/mvtec_ad/screw/test/thread_side",
+                // "--class_data_dir=C:/data/mvtec_ad/screw/test/thread_side",
+                // "--mask_data_dir=C:/data/mvtec_ad/screw/ground_truth/thread_side",
+                "--instance_data_dir=C:/data/MAGIC/wafer/train/crack",
+                "--class_data_dir=C:/data/MAGIC/wafer/train/crack",
+                "--mask_data_dir=C:/data/MAGIC/wafer/ground_truth/crack",
+                "--output_dir=${workspaceFolder}/model/debug_cpu/screw/thread_side",
+                
+                // --- (이하 스크립트 기본값) ---
+                "--prior_loss_weight=1.0",
+                "--instance_prompt=a photo of sks defect",
+                "--class_prompt=a photo of defect",
+                "--resolution=512",
+                "--train_batch_size=4", // ❗️ CPU 디버깅 시 메모리 부족하면 1로 줄이세요
+                "--gradient_accumulation_steps=1",
+                "--learning_rate=5e-6",
+                "--lr_scheduler=constant",
+                "--lr_warmup_steps=0",
+                "--num_class_images=200",
+                "--max_train_steps=500", // ❗️ 디버깅용으로 줄여서 테스트
+                "--text_noise_scale=1.0",
+                "--mvtecad"
+            ],
+            "justMyCode": true
+        },
+    ]
+}

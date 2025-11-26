@@ -24,9 +24,8 @@ pip install opencv-python
 
 ## 📦 Data Preparation
 
-### ✅ 1. Download MVTec AD Dataset
-Download from: https://www.mvtec.com/company/research/datasets/mvtec-ad  
-Extract it to a target directory and use the path when running training or inference.
+### ✅ 1. Download
+
 
 ### ✅ 2. Generate Foreground Masks using U-2-Net
 - **Source:** https://github.com/xuebinqin/U-2-Net  
